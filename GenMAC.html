@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title"
+        content="GenMAC: Compositional Text-to-Video Generation with Multi-Agent Collaboration" />
+    <meta property="og:url" content="https://genmac.github.io/" />
+    <!-- <meta property="og:image" content="static/images/head.png" /> -->
+    <meta property="og:image" content="static/images/pipeine1.png" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="1152" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>GenMAC</title>
+    <script>
+        var x = window.innerWidth;
+        function resizeFresh(){
+            if(x!=window.innerWidth)
+                location.reload();
+        }
+    </script>
+    <link rel="icon" type="image/x-icon" href="static/images/genmac_logo.png">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</head>
+
+<body onresize="resizeFresh()">
+
+    <section class="hero banner">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">
+                            <i class="genmac-icon"></i>
+                            <!-- <span style="color: rgb(167, 175, 246);">GenMAC:</span><br /> -->
+                            <span style="color: rgb(246, 167, 234);">GenMAC:</span><br />
+                            Compositional Text-to-Video Generation with Multi-Agent Collaboration</h1>
+                        <div class="is-size-5 publication-authors">
+                            <!-- Paper authors -->
+                            <span class="author-block">
+                                Kaiyi Huang<sup>1</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://scholar.google.com/citations?user=lHb5gzoAAAAJ&hl=zh-CN&oi=ao" style="text-decoration: none; color: inherit;">Yukun Huang</a><sup>1</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://www.ningxuefei.cc/"  style="text-decoration: none; color: inherit;">Xuefei Ning</a><sup>2</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://www.microsoft.com/en-us/research/people/zinanlin/"  style="text-decoration: none; color: inherit;">
+                                    Zinan Lin</a><sup>3</sup>,
+                            </span>
+                            <span class="author-block">
+                                <a href="https://scholar.google.com.hk/citations?user=j8JGVvoAAAAJ&hl=zh-CN" style="text-decoration: none; color: inherit;">
+                                    Yu Wang</a><sup>2</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://xh-liu.github.io/"  style="text-decoration: none; color: inherit;">
+                                    Xihui Liu</a><sup>1</sup></span>                            
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block"><sup>1</sup>The University of Hong Kong</span>
+                            &nbsp;
+                            <span class="author-block"><sup>2</sup>Tsinghua University</span>
+                            &nbsp;
+                            <span class="author-block"><sup>3</sup>Microsoft Research</span>
+                        </div>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="" target="_blank"
+                                        class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="" target="_blank"
+                                        class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">🤗</span>
+                                        <span>Paper page</span>
+                                    </a>
+                                </span>       
+                                <span class="link-block">
+                                    <a href="" target="_blank" class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">
+                                            <img src="./static/images/github-mark.png" alt="">
+                                        </span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>                                
+                                <!-- <span class="link-block">
+                                    <a href="https://arxiv.org/abs/2311.17002" target="_blank"
+                                        class="external-link button is-normal is-rounded is-white">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>                            -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    
+    <section class="hero is-small">
+      <div class="hero-body">
+          <div class="container">
+              <div id="results-carousel" class="carousel results-carousel" data-bs-ride="carousel">
+                  <!-- 第一个视频 -->
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/dragon_two_one.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">
+                          An icy landscape. A vast expanse of snow-covered mountain peaks stretches endlessly. Beneath them is a dense forest and a colossal frozen lake. Two people are boating in one boat, and one person is boating in one boat separately. Above, a ferocious red dragon dominates the sky and commands the heavens.
+                      </div>
+                  </div>
+  
+                  <!-- 第二个视频 -->
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/robot_car_moon.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">
+                          A robot walking from right to left across the moon with a car driving left to right in the background.
+                      </div>
+                  </div>
+  
+                  <!-- 第三个视频 -->
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/mouse.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">
+                          A small mouse in a tattered waistcoat reads a tiny book by the light of a glowing mushroom, with dew drops glistening on the grass around him.
+                      </div>
+                  </div>
+  
+                  <!-- 第四个视频 -->
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/3rose2sunflower.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">
+                          Three roses and two sunflowers.
+                      </div>
+                  </div>
+  
+                  <!-- 第五个视频 -->
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/boat_sail.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">
+                          A sailboat sails from right to left across the blue waters.
+                      </div>
+                  </div>
+  
+              </div>
+          </div>
+      </div>
+  </section>
+  
+  <script>
+      // 监听轮播的切换事件
+      document.getElementById('results-carousel').addEventListener('slide.bs.carousel', function (event) {
+          // 在切换前暂停所有视频
+          const videos = document.querySelectorAll('.carousel .card video');
+          videos.forEach(video => {
+              video.pause();
+              video.currentTime = 0; // 重置视频的播放进度
+          });
+  
+          // 在当前激活的卡片中播放视频
+          const activeCard = event.relatedTarget;
+          const activeVideo = activeCard.querySelector('video');
+          if (activeVideo) {
+              activeVideo.play();
+          }
+      });
+  
+      // 在页面加载时，默认播放第一个视频
+      document.addEventListener('DOMContentLoaded', () => {
+          const firstVideo = document.querySelector('.carousel .card video');
+          if (firstVideo) {
+              firstVideo.play();
+          }
+      });
+  </script>
+  
+
+
+    
+    <!-- Paper abstract -->
+    <section class="section hero is-light">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                          Text-to-video generation models have shown significant progress in the recent years. 
+                          However, they still struggle with generating complex dynamic scenes based on compositional text prompts, such as attribute binding for multiple objects, temporal dynamics associated with different objects, and interactions between objects. 
+                          Our key motivation is that complex tasks can be decomposed into simpler ones, each handled by a role-specialized MLLM agent. Multiple agents can collaborate together to achieve collective intelligence for complex goals. 
+                          We propose GenMAC, an iterative, multi-agent framework that enables compositional text-to-video generation. 
+                          The collaborative workflow includes three stages: Design, Generation, and Redesign, with an iterative loop between the Generation and Redesign stages to progressively verify and refine the generated videos. 
+                          The Redesign stage is the most challenging stage that aims to verify the generated videos, suggest corrections, and redesign the text prompts, frame-wise layouts, and guidance scales for the next iteration of generation. 
+                          To avoid hallucination of a single MLLM agent, we decompose this stage to four sequentially-executed MLLM-based agents: verification agent, suggestion agent, correction agent, and output structuring agent. 
+                          Furthermore, to tackle diverse scenarios of compositional text-to-video generation, we design a self-routing mechanism to adaptively select the proper correction agent from a collection of correction agents each specialized for one scenario. 
+                          Extensive experiments demonstrate the effectiveness of GenMAC, achieving state-of-the art performance in compositional text-to-video generation.
+                          
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End paper abstract -->
+
+    <div class="container">
+      <!-- Highlight title -->
+      <p style="text-align: center;">
+        <span class="section" style="font-size: 1.5em;"><b>Highlight:</b></span>
+      </p>
+    
+      <!-- Highlight list -->
+      <div style="text-align: center; max-width: 1000px; margin: auto;">
+        <ul style="list-style: none; padding: 0; font-size: 1.2em; text-align: left;">
+          <li>🌟 Task decomposition and role specialization for multi-agent collaboration and collective intelligence.</li>
+          <li>🌟 GenMAC for compositional text-to-video generation with multi-agent collaboration, an iterative workflow with Design, Generation, and Redesign stages.</li>
+          <li>🌟 Sequential task decomposition and adaptive self-routing for specialized agent selection.</li>
+        </ul>
+      </div>
+    </div>
+    
+<p class="section">&nbsp;</p>
+
+<section class="image-carousel">
+  <div id="carousel1" class="carousel-container">
+    <h2 class="title is-3"> Method</h2>
+    <p style="text-align: center;">
+      <i>Overview</i> of <i class="genmac-icon"></i>
+      <span style="color: rgb(246, 167, 234);">GenMAC</span>. 
+      (1) <b>Collaborative workflow</b> includes three stages with an iterative loop: Design, Generation, and
+      Redesign. 
+      (2) <b>Task decomposition</b> decomposes the redesign stage into four sub-tasks, handled by four agents. 
+      (3) <b>Self-routing mechanism</b> allows for adaptive selection of suitable correction agent to address the diverse requirements for compositional text-to-video generation.
+  </p>
+    <div class="carousel-images">
+
+      <img class="carousel-item" loading="lazy" src="./static/images/pipeine2.png" alt="teaser" />
+      <img class="carousel-item" loading="lazy" src="./static/images/pipeine1.png" alt="pipeline" />
+    </div>
+    
+    &nbsp;
+
+    <div class="carousel-dots">
+      <span class="dot" onclick="currentSlide('carousel1', 1)"></span>
+      <span class="dot" onclick="currentSlide('carousel1', 2)"></span>
+    </div>
+  </div>
+  <hr>
+
+</section>
+
+
+<section class="hero is-small">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+
+            <p>
+
+                <i>Illustration</i> of the allocation of roles: <b>verification agent</b>, <b>suggestion agent</b>, <b>correction agent</b>, and <b>output structuring agent</b> within a sequential task breakdown, highlighting the
+clear responsibilities of each agent.
+            </p>
+
+            <img loading="lazy" src="./static/images/pipeine3.png" alt="detail" />    
+            <hr>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="image-carousel">
+  <div class="container is-max-desktop">
+  <div id="carousel2" class="carousel-container">
+    <!-- <h2 class="title is-3"> Method</h2> -->
+    <p style="text-align: center;">
+      <i>Examples</i> of <i class="genmac-icon"></i> <span style="color: rgb(246, 167, 234);">GenMAC</span>.
+      Multi-agent collaboration and iterative refinement improves <b>scene accuracy</b> and <b>text alignment</b>.
+    </p>
+    <div class="carousel-images">
+
+      <img class="carousel-item" loading="lazy" src="./static/images/iter2.png" alt="iter2" />
+      <img class="carousel-item" loading="lazy" src="./static/images/iter3.png" alt="iter3" />
+      <img class="carousel-item" loading="lazy" src="./static/images/iter1.png" alt="iter1" />
+    </div>
+    
+    &nbsp;
+
+    <div class="carousel-dots">
+      <span class="dot" onclick="currentSlide('carousel2', 1)"></span>
+      <span class="dot" onclick="currentSlide('carousel2', 2)"></span>
+      <span class="dot" onclick="currentSlide('carousel2', 3)"></span>
+    </div>
+  </div>
+  <hr>
+
+</div>
+</section> 
+
+
+
+
+
+  <!-- Image carousel -->
+  <section class="hero is-small">
+    <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3">Qualitative comparison</h2>
+            <!-- <div id="results-carousel" class="carousel results-carousel" > -->
+                <!-- <div class="card" >
+                    <div class="card-image" > -->
+                        <video class="video-center" autoplay muted loop playsinline >
+                            <source src="./static/videos/only_qualitative_compare_1.mp4" type="video/mp4" class="video_style">
+                        </video>
+                    <!-- </div> -->
+                    <!-- <div class="card-content has-text-centered">An icy landscape. A vast expanse of snow-covered mountain peaks stretches endlessly. Beneath them is a dense forest and a colossal frozen lake. Two people are boating in one boat, and one person is boating in one boat separately Above, a ferocious red dragon dominates the sky and commands the heavens.
+                    </div> -->
+                <!-- </div>
+                <div class="card">
+                    <div class="card-image"> -->
+                        <video class="video-center" autoplay muted loop playsinline>
+                            <source src="./static/videos/only_qualitative_compare_2.mp4" type="video/mp4" class="video_style">
+                        </video>
+                    <!-- </div> -->
+                    <!-- <div class="card-content has-text-centered">A robot walking from right to left across the moon with a car driving left to right in the background. -->
+                    <!-- </div> -->
+                <!-- </div> -->
+                <!-- <div class="card">
+                    <div class="card-image"> -->
+                        <video class="video-center" autoplay muted loop playsinline>
+                            <source src="./static/videos/only_qualitative_compare_3.mp4" type="video/mp4" class="video_style">
+                        </video>
+                    <!-- </div> -->
+                    <!-- <div class="card-content has-text-centered">A small mouse in a tattered waistcoat reads a tiny book by the light of a glowing mushroom, with dew drops glistening on the grass around him. -->
+                    <!-- </div> -->
+                <!-- </div>
+                <div class="card">
+                  <div class="card-image"> -->
+                      <video class="video-center" autoplay muted loop playsinline>
+                          <source src="./static/videos/only_qualitative_compare_4.mp4" type="video/mp4" class="video_style">
+                      </video>
+                  <!-- </div> -->
+                  <!-- <div class="card-content has-text-centered">Three roses and two sunflowers. -->
+                  <!-- </div> -->
+              <!-- </div>
+              <div class="card">
+                <div class="card-image"> -->
+                    <video class="video-center" autoplay muted loop playsinline>
+                        <source src="./static/videos/only_qualitative_compare_5.mp4" type="video/mp4" class="video_style">
+                    </video>
+                <!-- </div> -->
+                <!-- <div class="card-content has-text-centered">A sailboat sails from right to left across the blue waters. -->
+                <!-- </div> -->
+            <!-- </div>
+            <div class="card">
+              <div class="card-image"> -->
+                  <video class="video-center" autoplay muted loop playsinline>
+                      <source src="./static/videos/only_qualitative_compare_6.mp4" type="video/mp4" class="video_style">
+                  </video>
+              <!-- </div> -->
+              <!-- <div class="card-content has-text-centered">A sailboat sails from right to left across the blue waters. -->
+              <!-- </div> -->
+          </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+  // 监听轮播的切换事件
+  document.getElementById('results-carousel').addEventListener('slide.bs.carousel', function (event) {
+      // 在切换前暂停所有视频
+      const videos = document.querySelectorAll('.carousel .card video');
+      videos.forEach(video => {
+          video.pause();
+          video.currentTime = 0; // 重置视频的播放进度
+      });
+
+      // 在当前激活的卡片中播放视频
+      const activeCard = event.relatedTarget;
+      const activeVideo = activeCard.querySelector('video');
+      if (activeVideo) {
+          activeVideo.play();
+      }
+  });
+
+  // 在页面加载时，默认播放第一个视频
+  document.addEventListener('DOMContentLoaded', () => {
+      const firstVideo = document.querySelector('.carousel .card video');
+      if (firstVideo) {
+          firstVideo.play();
+      }
+  });
+</script>
+<!-- End image carousel -->
+
+
+    <!-- Image carousel -->
+    <section class="hero is-small">
+      <div class="hero-body">
+          <div class="container">
+            <h2 class="title is-3">More examples</h2>
+              <div id="results-carousel" class="carousel results-carousel" >
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/teacup.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">A detailed, whimsical illustration of a colorful, rainbow boba tea cup with a cute, smiling face, sitting on a tiki bar-style windowsill overlooking a tropical oceanfront. 
+                      </div>
+                  </div>
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/girls_eating.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">In a fantasy world, two beautiful girls are wandering in the city mall chat and eating where the stall is on both side and the big castle is behind.
+
+                      </div>
+                  </div>
+                  <div class="card">
+                      <div class="card-image">
+                          <video class="video-center" autoplay muted loop playsinline>
+                              <source src="./static/videos/dragon_three.mp4" type="video/mp4" class="video_style">
+                          </video>
+                      </div>
+                      <div class="card-content has-text-centered">An icy landscape. A vast expanse of snow-covered mountain peaks stretches endlessly. Beneath them is a dense forest and a colossal frozen lake. Three people are boating in three boats separately Above, a ferocious red dragon dominates the sky and commands the heavens.
+
+                      </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-image">
+                        <video class="video-center" autoplay muted loop playsinline>
+                            <source src="./static/videos/colorful_herbs.mp4" type="video/mp4" class="video_style">
+                        </video>
+                    </div>
+                    <div class="card-content has-text-centered">Vast field full of colorful herbs on a windy day, depth, atmospheric light.
+                    </div>
+                </div>
+                <div class="card">
+                  <div class="card-image">
+                      <video class="video-center" autoplay muted loop playsinline>
+                          <source src="./static/videos/cat_stting.mp4" type="video/mp4" class="video_style">
+                      </video>
+                  </div>
+                  <div class="card-content has-text-centered">A cute ragdoll cat is sitting on the table in the middle, and beautiful teapot on the right and a tea cup on the left.
+
+                  </div>
+              </div>
+              <div class="card">
+                <div class="card-image">
+                    <video class="video-center" autoplay muted loop playsinline>
+                        <source src="./static/videos/rabbit.mp4" type="video/mp4" class="video_style">
+                    </video>
+                </div>
+                <div class="card-content has-text-centered">Rabbit tailor sews fabric into a dress.
+
+
+                </div>
+            </div>
+            <div class="card">
+              <div class="card-image">
+                  <video class="video-center" autoplay muted loop playsinline>
+                      <source src="./static/videos/football.mp4" type="video/mp4" class="video_style">
+                  </video>
+              </div>
+              <div class="card-content has-text-centered">A football rolling from the left to the right on the grass.
+
+
+              </div>
+          </div>
+          <div class="card">
+            <div class="card-image">
+                <video class="video-center" autoplay muted loop playsinline>
+                    <source src="./static/videos/retriever.mp4" type="video/mp4" class="video_style">
+                </video>
+            </div>
+            <div class="card-content has-text-centered">Golden retriever wearing a blue beret, a yellow sunglasses and a red scarf.
+
+            </div>
+        </div>
+        <div class="card">
+          <div class="card-image">
+              <video class="video-center" autoplay muted loop playsinline>
+                  <source src="./static/videos/balloon.mp4" type="video/mp4" class="video_style">
+              </video>
+          </div>
+          <div class="card-content has-text-centered">A balloon drifts right to left above a statue in a city square.
+
+
+          </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-image">
+            <video class="video-center" autoplay muted loop playsinline>
+                <source src="./static/videos/5apples.mp4" type="video/mp4" class="video_style">
+            </video>
+        </div>
+        <div class="card-content has-text-centered">Five apples on the table.
+
+        </div>
+    </div>
+    <div class="card">
+      <div class="card-image">
+          <video class="video-center" autoplay muted loop playsinline>
+              <source src="./static/videos/8apples.mp4" type="video/mp4" class="video_style">
+          </video>
+      </div>
+      <div class="card-content has-text-centered">Eight apples on the table.
+
+
+      </div>
+  </div>          <div class="card">
+    <div class="card-image">
+        <video class="video-center" autoplay muted loop playsinline>
+            <source src="./static/videos/10apples.mp4" type="video/mp4" class="video_style">
+        </video>
+    </div>
+    <div class="card-content has-text-centered">Ten apples on the table.
+
+    </div>
+</div>
+<div class="card">
+  <div class="card-image">
+      <video class="video-center" autoplay muted loop playsinline>
+          <source src="./static/videos/1rose1sunflower.mp4" type="video/mp4" class="video_style">
+      </video>
+  </div>
+  <div class="card-content has-text-centered">One rose and one sunflower.
+
+
+  </div>
+</div>          <div class="card">
+  <div class="card-image">
+      <video class="video-center" autoplay muted loop playsinline>
+          <source src="./static/videos/2rose1sunflower.mp4" type="video/mp4" class="video_style">
+      </video>
+  </div>
+  <div class="card-content has-text-centered">Two roses and one sunflower.
+
+  </div>
+</div>
+<div class="card">
+<div class="card-image">
+    <video class="video-center" autoplay muted loop playsinline>
+        <source src="./static/videos/3rose3sunflower.mp4" type="video/mp4" class="video_style">
+    </video>
+</div>
+<div class="card-content has-text-centered">Three roses and three sunflowers.
+
+
+</div>
+</div>          <div class="card">
+  <div class="card-image">
+      <video class="video-center" autoplay muted loop playsinline>
+          <source src="./static/videos/blue_cat_white_dog.mp4" type="video/mp4" class="video_style">
+      </video>
+  </div>
+  <div class="card-content has-text-centered">A blue cat and a white dog.
+
+  </div>
+</div>
+<div class="card">
+<div class="card-image">
+    <video class="video-center" autoplay muted loop playsinline>
+        <source src="./static/videos/black_cat_orange_dog.mp4" type="video/mp4" class="video_style">
+    </video>
+</div>
+<div class="card-content has-text-centered"> A black cat and an orange dog.
+
+
+</div>
+</div>          <div class="card">
+  <div class="card-image">
+      <video class="video-center" autoplay muted loop playsinline>
+          <source src="./static/videos/purple_cat_brown_dog.mp4" type="video/mp4" class="video_style">
+      </video>
+  </div>
+  <div class="card-content has-text-centered">A purple cat and a brown dog.
+
+  </div>
+</div>
+<div class="card">
+<div class="card-image">
+    <video class="video-center" autoplay muted loop playsinline>
+        <source src="./static/videos/blue_chair_white_room.mp4" type="video/mp4" class="video_style">
+    </video>
+</div>
+<div class="card-content has-text-centered"> A blue chair in a white room.
+
+
+</div>
+</div>          <div class="card">
+  <div class="card-image">
+      <video class="video-center" autoplay muted loop playsinline>
+          <source src="./static/videos/black_chair_orange_room.mp4" type="video/mp4" class="video_style">
+      </video>
+  </div>
+  <div class="card-content has-text-centered">A black chair in an orange room.
+
+  </div>
+</div>
+<div class="card">
+<div class="card-image">
+    <video class="video-center" autoplay muted loop playsinline>
+        <source src="./static/videos/purple_chair_brown_room.mp4" type="video/mp4" class="video_style">
+    </video>
+</div>
+<div class="card-content has-text-centered">A purple chair in a brown room.
+
+</div>
+</div>
+
+              </div>
+          </div>
+      </div>
+  </section>
+  <script>
+    // 监听轮播的切换事件
+    document.getElementById('results-carousel').addEventListener('slide.bs.carousel', function (event) {
+        // 在切换前暂停所有视频
+        const videos = document.querySelectorAll('.carousel .card video');
+        videos.forEach(video => {
+            video.pause();
+            video.currentTime = 0; // 重置视频的播放进度
+        });
+
+        // 在当前激活的卡片中播放视频
+        const activeCard = event.relatedTarget;
+        const activeVideo = activeCard.querySelector('video');
+        if (activeVideo) {
+            activeVideo.play();
+        }
+    });
+
+    // 在页面加载时，默认播放第一个视频
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstVideo = document.querySelector('.carousel .card video');
+        if (firstVideo) {
+            firstVideo.play();
+        }
+    });
+</script>
+  <!-- End image carousel -->
+    
+    
+    
+
+    <!--BibTex citation -->
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre><code>@article{
+              <!-- GenMAC2024,
+    title={}, 
+    author={},
+    year={2023},
+    eprint={2311.17002},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV} -->
+}</code></pre>
+        <span class="link-block">
+            <a href="https://karine-h.github.io/T2I-CompBench-new/" target="_blank"
+                class="external-link button is-normal is-rounded is-black">
+                <span class="icon">
+                    <img src="./static/images/github-mark-white.png" alt="">
+                </span>
+                <span>T2I-CompBench</span>
+            </a>
+        </span>
+        <span class="link-block">
+            <a href="https://t2v-compbench.github.io/" target="_blank"
+                class="external-link button is-normal is-rounded is-black">
+                <span class="icon">
+                    <img src="./static/images/github-mark-white.png" alt="">
+                </span>
+                <span>T2V-CompBench</span>
+            </a>
+        </span>
+        <span class="link-block">
+            <a href="https://zhenyuw16.github.io/GenArtist_page/" target="_blank"
+                class="external-link button is-normal is-rounded is-black">
+                <span class="icon">
+                    <img src="./static/images/github-mark-white.png" alt="">
+                </span>
+                <span>GenArtist</span>
+            </a>
+        </span>                
+        </div>
+    </section>
+    <!--End BibTex citation -->
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p>
+                            This page was built using the <a
+                                href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+                            You are free to borrow the of this website, we just ask that you link back to this page in
+                            the footer. <br> This website is licensed under a <a rel="license"
+                                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                                Commons Attribution-ShareAlike 4.0 International License</a>.
+                        </p>
+                        <p class="has-text-centered">Total clicks: <span id="busuanzi_value_site_pv"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
